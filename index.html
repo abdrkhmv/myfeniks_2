@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Telegram Mini App Example</title>
+  <title>Telegram Registration System</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
       margin: 20px;
     }
-    #user-info {
+    #user-info, #registration-form {
       margin-top: 20px;
       padding: 10px;
       border: 1px solid #ccc;
@@ -18,14 +18,70 @@
       display: inline-block;
       text-align: left;
     }
+    input, select, button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 8px;
+      font-size: 1rem;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
-  <h1>Telegram Mini App Integration</h1>
+  <h1>Telegram Mini App Registration</h1>
+
+  <!-- Section to display Telegram user info -->
   <div id="user-info">
     <p><strong>Telegram ID:</strong> <span id="telegram-id">Loading...</span></p>
     <p><strong>Username:</strong> <span id="telegram-username">Loading...</span></p>
     <p><strong>Full Name:</strong> <span id="telegram-name">Loading...</span></p>
+  </div>
+
+  <!-- Registration form -->
+  <div id="registration-form" style="display: none;">
+    <h2>Complete Registration</h2>
+    <form id="register-form">
+      <label for="first-name">First Name:</label>
+      <input type="text" id="first-name" name="first-name" required>
+      
+      <label for="last-name">Last Name:</label>
+      <input type="text" id="last-name" name="last-name" required>
+
+      <label for="phone-number">Phone Number:</label>
+      <input type="tel" id="phone-number" name="phone-number" placeholder="+998..." required>
+
+      <label for="university-email">University Email:</label>
+      <input type="email" id="university-email" name="university-email" required>
+
+      <label for="level">University Level:</label>
+      <select id="level" name="level" required>
+        <option value="">Select Level</option>
+        <option value="Level 3">Level 3</option>
+        <option value="Level 4">Level 4</option>
+        <option value="Level 5">Level 5</option>
+        <option value="Level 6">Level 6</option>
+      </select>
+
+      <label for="group">University Group:</label>
+      <input type="text" id="group" name="group" placeholder="e.g., CIFS27" required>
+
+      <label>
+        <input type="checkbox" id="terms" name="terms" required>
+        I agree to the Terms and Conditions
+      </label>
+
+      <button type="submit">Register</button>
+    </form>
   </div>
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -41,14 +97,48 @@
       const telegramUsername = initData.user?.username || 'N/A';
       const telegramName = `${initData.user?.first_name || ''} ${initData.user?.last_name || ''}`.trim() || 'N/A';
 
-      // Update the page with user info
+      // Update the page with Telegram user info
       document.getElementById('telegram-id').textContent = telegramId;
       document.getElementById('telegram-username').textContent = telegramUsername;
       document.getElementById('telegram-name').textContent = telegramName;
+
+      // Simulated check if the user is already registered (replace this with your database logic)
+      const isUserRegistered = false; // Assume new user for now
+
+      // If user is not registered, show the registration form
+      if (!isUserRegistered) {
+        document.getElementById('registration-form').style.display = 'block';
+      }
     } else {
       // If Telegram WebApp isn't initialized
       document.getElementById('user-info').textContent = "Failed to load Telegram Mini App data.";
     }
+
+    // Handle form submission
+    const registerForm = document.getElementById('register-form');
+    registerForm.addEventListener('submit', (event) => {
+      event.preventDefault(); // Prevent form from reloading the page
+
+      // Gather data from the form
+      const formData = {
+        telegramId: document.getElementById('telegram-id').textContent,
+        firstName: document.getElementById('first-name').value,
+        lastName: document.getElementById('last-name').value,
+        phoneNumber: document.getElementById('phone-number').value,
+        universityEmail: document.getElementById('university-email').value,
+        level: document.getElementById('level').value,
+        group: document.getElementById('group').value,
+        termsAccepted: document.getElementById('terms').checked,
+      };
+
+      // Send the data to your backend or database
+      console.log('Form Data Submitted:', formData);
+
+      // Show a success message or redirect user
+      alert('Registration completed successfully!');
+      registerForm.reset(); // Reset the form
+      document.getElementById('registration-form').style.display = 'none'; // Hide the form
+    });
   </script>
 </body>
 </html>
